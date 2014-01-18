@@ -29,7 +29,7 @@
 #include "options.h"
 #include "parallel.h"
 #include "union_find.h"
-#include "timer_mpi.hpp"
+#include "timer_maprof_mpi.h"
 
 #include <boost/random.hpp>
 #include <boost/timer.hpp>
@@ -90,6 +90,12 @@ int main(int argc, char* argv[]) {
   const int num_threads = 1;
 #endif
   if (process_id == 0) std::cout << "Number of Threads         = " << num_threads << std::endl;
+  timer.set_parameter("L", p.length);
+  timer.set_parameter("beta", p.beta);
+  timer.set_parameter("sweeps", p.sweeps);
+  timer.set_parameter("therm", p.therm);
+  timer.set_parameter("total_sweeps", p.therm + p.sweeps);
+  timer.set_repstdout(p.repstdout);
 
   // lattice
   chain_lattice lattice(p.length);
@@ -166,7 +172,6 @@ int main(int argc, char* argv[]) {
   timer.start(9);
   unifier_t unifier(MPI_COMM_WORLD, timer, lattice.num_sites(), p.partition, p.duplex);
   timer.stop(9);
-  timer.summarize(); // measure costs of unifier to initialize.
 
 #ifdef LOOPER_OPENMP
   lattice_sharing sharing(lattice);

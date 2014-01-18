@@ -23,6 +23,7 @@ struct options {
   unsigned int therm;
   std::string partition;
   bool duplex;
+  bool repstdout;
   bool valid;
   bool t_is_set, b_is_set;
   bool therm_is_set;
@@ -31,7 +32,7 @@ struct options {
     bool parallel = false, bool print = true) :
     // default parameters
     length(len_def), temperature(temp_def), beta(0),
-    sweeps(1 << 16), therm(sweeps >> 3), partition(""), duplex(true),
+    sweeps(1 << 16), therm(sweeps >> 3), partition(""), duplex(true), repstdout(false),
     valid(true) {
 
     t_is_set = 0; b_is_set = 0;
@@ -64,6 +65,8 @@ struct options {
           if (!parallel) { usage(parallel, print); return; }
           if (++i == argc) { usage(parallel, print); return; }
           partition = argv[i]; break;
+        case 'r' :
+          repstdout = true; break;
         case 's' :
           if (!parallel) { usage(parallel, print); return; }
           duplex = false; break;
@@ -111,7 +114,8 @@ struct options {
          << "  -b double  Beta (inverse temperature)\n"
          << "  -m int     MCS for Thermalization\n"
          << "  -n int     MCS for Measurement\n"
-         << "  -i int     MCS between detailed timer measurement\n";
+         << "  -i int     MCS between detailed timer measurement\n"
+         << "  -r         Report detailed timer to STDOUT\n";
       if (parallel)
         os << "  -p string  Process Partition\n"
            << "  -s         Use simplex communication mode instead of duplex one\n";

@@ -32,7 +32,7 @@
 #include "expand.h"
 #include "prime_factorization.h"
 #include "union_find.h"
-#include "timer_mpi.hpp"
+#include "timer_maprof_mpi.h"
 
 #include <boost/detail/workaround.hpp>
 #if !defined(BOOST_SPIRIT_USE_OLD_NAMESPACE)

@@ -28,7 +28,7 @@
 #include "operator.h"
 #include "options.h"
 #include "union_find.h"
-#include "timer.hpp"
+#include "timer_maprof.h"
 
 #include <boost/random.hpp>
 #include <boost/timer.hpp>
@@ -77,6 +77,12 @@ int main(int argc, char* argv[]) {
   const int num_threads = 1;
 #endif
   std::cout << "Number of Threads         = " << num_threads << std::endl;
+  timer.set_parameter("L", p.length);
+  timer.set_parameter("beta", p.beta);
+  timer.set_parameter("sweeps", p.sweeps);
+  timer.set_parameter("therm", p.therm);
+  timer.set_parameter("total_sweeps", p.therm + p.sweeps);
+  timer.set_repstdout(p.repstdout);
 
   // lattice
   chain_lattice lattice(p.length);
