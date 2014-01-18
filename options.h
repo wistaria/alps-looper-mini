@@ -32,15 +32,10 @@ struct options {
   unsigned int length;
   double temperature;
   double beta;
-#ifdef LOOPER_ENABLE_PLAQUETTE
-  double J;
-  double Q;
-#endif
   unsigned int sweeps;
   unsigned int therm;
   std::string partition;
   bool duplex;
-  unsigned int dtime_interval;
   bool valid;
   bool t_is_set, b_is_set;
   bool therm_is_set;
@@ -49,11 +44,7 @@ struct options {
     bool parallel = false, bool print = true) :
     // default parameters
     length(len_def), temperature(temp_def), beta(0),
-#ifdef LOOPER_ENABLE_PLAQUETTE
-    J(1.0), Q(0.0),
-#endif
     sweeps(1 << 16), therm(sweeps >> 3), partition(""), duplex(true),
-    dtime_interval(1), 
     valid(true) {
 
     t_is_set = 0; b_is_set = 0;
@@ -89,19 +80,6 @@ struct options {
         case 's' :
           if (!parallel) { usage(parallel, print); return; }
           duplex = false; break;
-        case 'd' :
-          if (argv[i][2] == 'i') {
-            if (++i == argc) { usage(parallel, print); return; }
-            dtime_interval = boost::lexical_cast<unsigned int>(argv[i]); break;
-          }
-#ifdef LOOPER_ENABLE_PLAQUETTE
-        case 'j' :
-          if (++i == argc) { usage(parallel, print); return; }
-          J = boost::lexical_cast<double>(argv[i]); break;
-        case 'q' :
-          if (++i == argc) { usage(parallel, print); return; }
-          Q = boost::lexical_cast<double>(argv[i]); break;
-#endif
         case 'h' :
           usage(parallel, print, std::cout); return;
         default :
@@ -127,14 +105,9 @@ struct options {
 
     if (print) {
       std::cout << "System Linear Size        = " << length << '\n'
-#ifdef LOOPER_ENABLE_PLAQUETTE
-                << "J                         = " << J << '\n'
-                << "Q                         = " << Q << '\n'
-#endif
                 << "Temperature               = " << temperature << '\n'
                 << "MCS for Thermalization    = " << therm << '\n'
-                << "MCS for Measurement       = " << sweeps << '\n'
-                << "Detailed timer interval   = " << dtime_interval << '\n';
+                << "MCS for Measurement       = " << sweeps << '\n';
       if (parallel) {
         if (partition.size())
           std::cout << "Process Partition         = " << partition << '\n';
@@ -149,10 +122,6 @@ struct options {
          << "  -l int     System Linear Size\n"
          << "  -t double  Temperature\n"
          << "  -b double  Beta (inverse temperature)\n"
-#ifdef LOOPER_ENABLE_PLAQUETTE
-         << "  -j double  Coupling Constant J\n"
-         << "  -q double  Coupling Constant Q\n"
-#endif
          << "  -m int     MCS for Thermalization\n"
          << "  -n int     MCS for Measurement\n"
          << "  -i int     MCS between detailed timer measurement\n";

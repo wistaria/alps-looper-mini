@@ -33,8 +33,6 @@
 
 #define ALPS_INDEP_SOURCE
 // #define ALPS_ENABLE_TIMER
-// #define ALPS_ENABLE_TIMER_TRACE
-// #define ALPS_ENABLE_TIMER_DETAILED
 
 #include "atomic_impl.h"
 #include "chain_lattice.h"
@@ -57,12 +55,6 @@
 # include "lattice_sharing.h"
 # include "subaccumulate.h"
 # include <boost/shared_ptr.hpp>
-#endif
-
-#if defined(ALPS_ENABLE_FAPP) || defined(ALPS_ENABLE_FAPP_PA)
-template<>
-char alps::parapack::detail::timer_base<alps::parapack::detail::clock>::msgs[512][256]
- = {"dummy string for allocation"};
 #endif
 
 int main(int argc, char* argv[]) {
@@ -495,7 +487,6 @@ int main(int argc, char* argv[]) {
       ssus << 0.25 * beta * coll.ssus / lattice.num_sites();
     }
     timer.stop(2);
-    timer.detailed_report(p.dtime_interval);
   }
 
   double elapsed = tm.elapsed() / num_threads;
