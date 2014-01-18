@@ -184,21 +184,9 @@ int main(int argc, char* argv[]) {
   observable smag; // staggered magnetizetion^2
   observable ssus; // staggered susceptibility
 
-  // vector reservation
-  if (p.reserve_times || p.reserve_operators || p.reserve_estimates || p.reserve_fragments) {
-    for (int tid = 0; tid < omp_get_max_threads(); ++tid) {
-      times_g[tid].reserve(p.reserve_times);
-      operators_g[tid].reserve(p.reserve_operators);
-      operators_pg[tid].reserve(p.reserve_operators);
-      estimates_g[tid].reserve(p.reserve_estimates);
-    }
-    fragments.reserve(p.reserve_fragments);
-  }
-
   // unifier
   timer.start(9);
-  unifier_t unifier(MPI_COMM_WORLD, timer, lattice.num_sites(), p.partition, p.duplex,
-    p.reserve_chunk_links, p.reserve_chunk_estimates);
+  unifier_t unifier(MPI_COMM_WORLD, timer, lattice.num_sites(), p.partition, p.duplex);
   timer.stop(9);
   timer.summarize(); // measure costs of unifier to initialize.
 

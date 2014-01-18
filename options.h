@@ -40,14 +40,6 @@ struct options {
   unsigned int therm;
   std::string partition;
   bool duplex;
-  unsigned int reserve_times;
-  unsigned int reserve_operators;
-  unsigned int reserve_fragments;
-  unsigned int reserve_estimates;
-//fj>
-  unsigned int reserve_chunk_links;
-  unsigned int reserve_chunk_estimates;
-//fj<
   unsigned int dtime_interval;
   bool valid;
   bool t_is_set, b_is_set;
@@ -61,10 +53,6 @@ struct options {
     J(1.0), Q(0.0),
 #endif
     sweeps(1 << 16), therm(sweeps >> 3), partition(""), duplex(true),
-    reserve_times(0), reserve_operators(0), reserve_fragments(0), reserve_estimates(0),
-    //fj>
-    reserve_chunk_links(0), reserve_chunk_estimates(0),
-    //fj<
     dtime_interval(1), 
     valid(true) {
 
@@ -98,32 +86,6 @@ struct options {
           if (!parallel) { usage(parallel, print); return; }
           if (++i == argc) { usage(parallel, print); return; }
           partition = argv[i]; break;
-        case 'r' :
-          if (argv[i][2] == 't') {
-            if (++i == argc) { usage(parallel, print); return; }
-            reserve_times = boost::lexical_cast<unsigned int>(argv[i]); break;
-          } else if (argv[i][2] == 'o') {
-            if (++i == argc) { usage(parallel, print); return; }
-            reserve_operators = boost::lexical_cast<unsigned int>(argv[i]); break;
-          } else if (argv[i][2] == 'f') {
-            if (++i == argc) { usage(parallel, print); return; }
-            reserve_fragments = boost::lexical_cast<unsigned int>(argv[i]); break;
-          } else if (argv[i][2] == 'e') {
-            if (++i == argc) { usage(parallel, print); return; }
-            reserve_estimates = boost::lexical_cast<unsigned int>(argv[i]); break;
-          } else if (argv[i][2] == 'c') {
-            if (argv[i][3] == 'l') {
-              if (++i == argc) { usage(parallel, print); return; }
-              reserve_chunk_links = boost::lexical_cast<unsigned int>(argv[i]); break;
-            } else if (argv[i][3] == 'e') {
-              if (++i == argc) { usage(parallel, print); return; }
-              reserve_chunk_estimates = boost::lexical_cast<unsigned int>(argv[i]); break;
-            } else {
-              usage(parallel, print); return; 
-            }
-          } else {
-            usage(parallel, print); return; 
-          }
         case 's' :
           if (!parallel) { usage(parallel, print); return; }
           duplex = false; break;
@@ -173,18 +135,6 @@ struct options {
                 << "MCS for Thermalization    = " << therm << '\n'
                 << "MCS for Measurement       = " << sweeps << '\n'
                 << "Detailed timer interval   = " << dtime_interval << '\n';
-        if (reserve_times)
-          std::cout << "Reserved size for times            = " << reserve_times << '\n';
-        if (reserve_operators)
-          std::cout << "Reserved size for operators        = " << reserve_operators << '\n';
-        if (reserve_fragments)
-          std::cout << "Reserved size for fragments        = " << reserve_fragments << '\n';
-        if (reserve_estimates)
-          std::cout << "Reserved size for estimates        = " << reserve_estimates << '\n';
-        if (reserve_chunk_links)
-          std::cout << "Reserved size for chunk::links     = " << reserve_chunk_links << '\n';
-        if (reserve_chunk_estimates)
-          std::cout << "Reserved size for chunk::estimates = " << reserve_chunk_estimates << '\n';
       if (parallel) {
         if (partition.size())
           std::cout << "Process Partition         = " << partition << '\n';
@@ -205,13 +155,7 @@ struct options {
 #endif
          << "  -m int     MCS for Thermalization\n"
          << "  -n int     MCS for Measurement\n"
-         << "  -i int     MCS between detailed timer measurement\n"
-         << "  -rt int    Reserved size for times\n"
-         << "  -ro int    Reserved size for operators\n"
-         << "  -rf int    Reserved size for fragments\n"
-         << "  -re int    Reserved size for estimates\n"
-         << "  -rcl int   Reserved size for chunk::links\n"
-         << "  -rce int   Reserved size for chunk::estimates\n";
+         << "  -i int     MCS between detailed timer measurement\n";
       if (parallel)
         os << "  -p string  Process Partition\n"
            << "  -s         Use simplex communication mode instead of duplex one\n";

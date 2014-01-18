@@ -91,12 +91,6 @@ public:
     coll_.clear_range();
 #endif
   }
-  void reserve(int reserve_links, int reserve_estimates) {
-    #ifndef COMMUNICATION_TEST
-    links_.reserve(reserve_links);
-    estimates_.reserve(reserve_estimates);
-    #endif
-  }
 
   static void init_timer(alps::parapack::timer_mpi& timer) {
 #ifndef COMMUNICATION_TEST
@@ -949,11 +943,6 @@ public:
     chunk1_.init(ns);
     chunk_tmp_.init(ns);
   }
-  void reserve(int reserve_links, int reserve_estimates) {
-    chunk0_.reserve(reserve_links, reserve_estimates);
-    chunk1_.reserve(reserve_links, reserve_estimates);
-    chunk_tmp_.reserve(reserve_links, reserve_estimates);
-  }
   static void init_timer(alps::parapack::timer_mpi& timer) {
 #ifndef COMMUNICATION_TEST
     timer.registrate(41, 2, "______chunks__insert_all");
@@ -1427,45 +1416,37 @@ public:
     int flip_; // negative if cluster is still open
   };
 
-  parallel_cluster_unifier(MPI_Comm comm) : comm_(comm), reserved_(false) {
+  parallel_cluster_unifier(MPI_Comm comm) : comm_(comm) {
     init_comm(0, "", true);
   }
   parallel_cluster_unifier(MPI_Comm comm, std::string const& partition_str, bool duplex)
-    : comm_(comm), reserved_(false) {
+    : comm_(comm) {
     init_comm(0, partition_str, duplex);
   }
   parallel_cluster_unifier(MPI_Comm comm, int num_sites, std::string const& partition_str,
-    bool duplex, int reserve_links = 0, int reserve_estimates = 0)
-    : comm_(comm), reserved_(false) {
+    bool duplex)
+    : comm_(comm) {
     init_comm(0, partition_str, duplex);
-    initialize(0, num_sites, reserve_links, reserve_estimates);
+    initialize(0, num_sites);
   }
   parallel_cluster_unifier(MPI_Comm comm, alps::parapack::timer_mpi& timer, int num_sites, std::string const& partition_str = "",
-    bool duplex = true, int reserve_links = 0, int reserve_estimates = 0)
-    : comm_(comm), reserved_(false) {
+    bool duplex = true)
+    : comm_(comm) {
     init_comm(&timer, partition_str, duplex);
-    initialize(&timer, num_sites, reserve_links, reserve_estimates);
+    initialize(&timer, num_sites);
   }
 
-  void initialize(int num_sites, int reserve_links = 0, int reserve_estimates = 0) {
-    initialize(0, num_sites, reserve_links, reserve_estimates);
+  void initialize(int num_sites) {
+    initialize(0, num_sites);
   }
-  void initialize(alps::parapack::timer_mpi& timer, int num_sites,
-    int reserve_links = 0, int reserve_estimates = 0) {
-    initialize(&timer, num_sites, reserve_links, reserve_estimates);
+  void initialize(alps::parapack::timer_mpi& timer, int num_sites) {
+    initialize(&timer, num_sites);
   }
-  void initialize(alps::parapack::timer_mpi *timer_ptr, int num_sites, int reserve_links = 0,
-    int reserve_estimates = 0) {
+  void initialize(alps::parapack::timer_mpi *timer_ptr, int num_sites) {
     // prepare chunks
     if (timer_ptr) timer_ptr->start(36);
     num_sites_ = num_sites;
     num_boundaries_ = 2 * num_sites;
-    if (reserve_links || reserve_estimates) {
-      reserved_ = true;
-      chunks_.reserve(reserve_links, reserve_estimates);
-      chunks_r_.reserve(reserve_links, reserve_estimates);
-      chunks_s_.reserve(reserve_links, reserve_estimates);
-    }
     chunks_.init(num_sites_);
     chunks_r_.init(num_sites_);
     chunks_s_.init(num_sites_);
@@ -1848,7 +1829,6 @@ private:
   int num_sites_; // number of (virtual) sites
   int num_boundaries_; // number of sites at imaginary-boundaries (2 * num_sites_)
   bool duplex_; // use duplex communication or simplex one
-  bool reserved_;
 
   // working areas
   chunks_t chunks_;
