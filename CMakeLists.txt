@@ -3,7 +3,7 @@
 #      (See http://www.boost.org/LICENSE_1_0.txt)
 
 cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
-project(alps-looper-mini)
+project(alps-looper-mini NONE)
 
 if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Type of build" FORCE)
@@ -17,10 +17,16 @@ list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/config")
 #
 option(LOOPER_ENABLE_OPENMP "OpenMP is enabled by default. You can turn off OpenMP by -DLOOPER_ENABLE_OPENMP=OFF" ON)
 
-option(LOOPER_TIMER "You can turn on Timer by -DLOOPER_TIMER=ON" OFF)
+option(LOOPER_TIMER "Timer is enabled by defualt. You can turn off Timer by -DLOOPER_TIMER=OFF" ON)
 if(LOOPER_TIMER)
   add_definitions(-DALPS_ENABLE_TIMER)
 endif(LOOPER_TIMER)
+
+#
+# C++ and C compilers
+#
+enable_language(CXX)
+enable_language(C)
 
 #
 # Required external sources/libraries.
