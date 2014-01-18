@@ -2,7 +2,6 @@ System Linear Size        = 8
 Temperature               = 0.2
 MCS for Thermalization    = 8192
 MCS for Measurement       = 65536
-Detailed timer interval   = 1
 Communication mode        = duplex
 Number of Threads         = 1
 Info: parallel: duplex mode, number of processes = 1 [1]
