@@ -2,7 +2,7 @@
 *
 * ALPS/looper: multi-cluster quantum Monte Carlo algorithms for spin systems
 *
-* Copyright (C) 1997-2012 by Synge Todo <wistaria@comp-phys.org>,
+* Copyright (C) 1997-2014 by Synge Todo <wistaria@comp-phys.org>,
 *                            Haruhiko Matsuo <halm@looper.t.u-tokyo.ac.jp>
 *
 * This software is published under the ALPS Application License; you
@@ -37,7 +37,6 @@
 // #define ALPS_ENABLE_TIMER_DETAILED
 
 #include "atomic_impl.h"
-#include "capacity.h"
 #include "chain_lattice.h"
 #include "expand.h"
 #include "observable.h"
@@ -179,8 +178,6 @@ int main(int argc, char* argv[]) {
       estimates_g[tid].reserve(p.reserve_estimates);
     }
     fragments.reserve(p.reserve_fragments);
-    looper::vector_capacity capacity(times_g, operators_g, operators_pg, estimates_g, fragments);
-    capacity.report();
   }
 
 #ifdef LOOPER_OPENMP
@@ -510,12 +507,6 @@ int main(int argc, char* argv[]) {
     }
     timer.stop(2);
     timer.detailed_report(p.dtime_interval);
-  }
-
-  // check vector capcity
-  if (p.reserve_times || p.reserve_operators || p.reserve_estimates || p.reserve_fragments) {
-    looper::vector_capacity capacity(times_g, operators_g, operators_pg, estimates_g, fragments);
-    capacity.report();
   }
 
   double elapsed = tm.elapsed() / num_threads;

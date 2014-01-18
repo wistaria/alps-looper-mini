@@ -2,7 +2,7 @@
 *
 * ALPS/looper: multi-cluster quantum Monte Carlo algorithms for spin systems
 *
-* Copyright (C) 1997-2012 by Synge Todo <wistaria@comp-phys.org>,
+* Copyright (C) 1997-2014 by Synge Todo <wistaria@comp-phys.org>,
 *                            Haruhiko Matsuo <halm@looper.t.u-tokyo.ac.jp>,
 *                            Hideyuki Shitara <shitara.hide@jp.fujitsu.com>
 *
@@ -42,7 +42,6 @@
 // #define COMMUNICATION_TEST
 // #define COMMUNICATION_DEBUG_OUTPUT
 
-#include "capacity_mpi.h"
 #include "expand.h"
 #include "prime_factorization.h"
 #include "union_find.h"
@@ -96,12 +95,6 @@ public:
     #ifndef COMMUNICATION_TEST
     links_.reserve(reserve_links);
     estimates_.reserve(reserve_estimates);
-    #endif
-  }
-  void capacity_report(MPI_Comm comm, std::string const& name) const {
-    #ifndef COMMUNICATION_TEST
-    unifier_capacity capacity(links_, estimates_);
-    capacity.report(comm, name);
     #endif
   }
 
@@ -961,11 +954,6 @@ public:
     chunk1_.reserve(reserve_links, reserve_estimates);
     chunk_tmp_.reserve(reserve_links, reserve_estimates);
   }
-  void capacity_report(MPI_Comm comm, std::string const& name) const {
-    chunk0_.capacity_report(comm, name + ".chunk0_");
-    chunk1_.capacity_report(comm, name + ".chunk1_");
-    chunk_tmp_.capacity_report(comm, name + ".chunk_tmp_");
-  }
   static void init_timer(alps::parapack::timer_mpi& timer) {
 #ifndef COMMUNICATION_TEST
     timer.registrate(41, 2, "______chunks__insert_all");
@@ -1478,7 +1466,6 @@ public:
       chunks_r_.reserve(reserve_links, reserve_estimates);
       chunks_s_.reserve(reserve_links, reserve_estimates);
     }
-    capacity_report();
     chunks_.init(num_sites_);
     chunks_r_.init(num_sites_);
     chunks_s_.init(num_sites_);
@@ -1513,14 +1500,6 @@ public:
     timer.registrate(38, 6, "__unifier_initialize_cartesian");
     timer.registrate(39, 6, "__unifier_initialize_working_arrays");
     chunks_t::init_timer(timer);
-  }
-
-  void capacity_report() const {
-    if (reserved_) {
-      chunks_.capacity_report(comm_, "chunks_");
-      chunks_r_.capacity_report(comm_, "chunks_r_");
-      chunks_s_.capacity_report(comm_, "chunks_s_");
-    }
   }
 
   #ifdef LOOPER_OPENMP

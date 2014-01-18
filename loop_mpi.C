@@ -2,7 +2,7 @@
 *
 * ALPS/looper: multi-cluster quantum Monte Carlo algorithms for spin systems
 *
-* Copyright (C) 1997-2012 by Synge Todo <wistaria@comp-phys.org>,
+* Copyright (C) 1997-2014 by Synge Todo <wistaria@comp-phys.org>,
 *                            Haruhiko Matsuo <halm@looper.t.u-tokyo.ac.jp>
 *
 * This software is published under the ALPS Application License; you
@@ -38,7 +38,6 @@
 // #define ALPS_ENABLE_TIMER_BARRIER
 
 #include "atomic_impl.h"
-#include "capacity_mpi.h"
 #include "chain_lattice.h"
 #include "expand.h"
 #include "observable.h"
@@ -194,8 +193,6 @@ int main(int argc, char* argv[]) {
       estimates_g[tid].reserve(p.reserve_estimates);
     }
     fragments.reserve(p.reserve_fragments);
-    looper::vector_capacity capacity(times_g, operators_g, operators_pg, estimates_g, fragments);
-    capacity.report(MPI_COMM_WORLD);
   }
 
   // unifier
@@ -615,13 +612,6 @@ int main(int argc, char* argv[]) {
               << "Staggered Susceptibility  = "
               << ssus.mean() << " +- " << ssus.error() << std::endl;
   }
-
-  // check vector capcity
-  if (p.reserve_times || p.reserve_operators || p.reserve_estimates || p.reserve_fragments) {
-    looper::vector_capacity capacity(times_g, operators_g, operators_pg, estimates_g, fragments);
-    capacity.report(MPI_COMM_WORLD);
-  }
-  unifier.capacity_report();
 
   timer.stop(1);
   timer.summarize();
