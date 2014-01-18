@@ -54,6 +54,14 @@ else(LOOPER_ENABLE_OPENMP)
   message(STATUS "Disabled OpenMP")
 endif(LOOPER_ENABLE_OPENMP)
 
+## maprof
+if(LOOPER_TIMER)
+  set(MAPROF_SOURCES ma_prof/src/maprof.c ma_prof/src/maprof_time.c ma_prof/src/maprof_yaml.c ma_prof/src/maprof_proc.c)
+  add_definitions(-DMAPROF_MAX_SECTIONS=20 -DMAPROF_OUTPUT="maprof_output.yaml")
+else(LOOPER_TIMER)
+  set(MAPROF_SOURCES)
+endif(LOOPER_TIMER)
+
 #
 # RPATH setting
 #
@@ -74,12 +82,12 @@ include(config/add_alps_test.cmake)
 #
 # targets
 #
-add_executable(loop loop.C)
+add_executable(loop loop.C ${MAPROF_SOURCES})
 add_alps_test(loop)
 
 if(MPI_FOUND)
   include_directories(${MPI_INCLUDE_PATH})
-  add_executable(loop_mpi loop_mpi.C)
+  add_executable(loop_mpi loop_mpi.C ${MAPROF_SOURCES})
   target_link_libraries(loop_mpi ${MPI_LIBRARIES})
   foreach(np RANGE 1 4)
     add_alps_test_mpi(loop_mpi ${np})
