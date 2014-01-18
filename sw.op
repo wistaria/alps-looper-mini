@@ -1,0 +1,8 @@
+System Linear Size        = 8
+Temperature               = 2.27
+MCS for Thermalization    = 8192
+MCS for Measurement       = 65536
+Detailed timer interval   = 1
+Number of Threads         = 1
+Number of Clusters        = 8.47647 +- 0.0150609
+Uniform Susceptibility    = 18.2343 +- 0.0231787
