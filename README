@@ -15,31 +15,37 @@ This directory contains the kernel code (MiniAppli) of the loop
 algorithm quantum Monte Carlo method extracted from path_integral.C in
 ALPS/looper Library (http://wistaria.comp-phys.org/alps-looper).
 
-  loop.C          main program (serial version)
-  loop_mpi.C      main program (parallel version)
+  loop.C            main program (serial version)
+  loop_mpi.C        main program (parallel version)
 
-  atomic.h atomic_impl.h             compare_and_swap (CAS) functions
-  chain_lattice.h lattice_sharing.h  lattice class
-  obervable.h     class definition for statistica averaging
-                  (simplified version of ALPS/alea)
-  options.h       class definition for command line interace
-  paralel.h       class for parallel cluster unification
-  union_find.h    functions for linked-list management
-  expand.h prime_factorizatin.h subaccumulate.h  helper functions
+  looper/
+    atomic.h atomic_impl.h             compare_and_swap (CAS) functions
+    chain_lattice.h lattice_sharing.h  lattice class
+    obervable.h                        class definition for statistica averaging
+                                       (simplified version of ALPS/alea)
+    options.h                          class definition for command line interace
+    paralel.h                          class for parallel cluster unification
+    union_find.h                       functions for linked-list management
+    expand.h prime_factorizatin.h subaccumulate.h  helper functions
+    timer_maprof.h timer_maprof_mpi.h  wrapper for ma_prof library
 
-  loop.op         output of loop program (executed with no options)
-  loop_mpi.op-X   output of loop_mpi program (executed with no options)
-                  X (= 1,2,3,4) denotes the number of processes
+  loop.op           output of loop program (executed with no options)
+  loop_mpi.op-X     output of loop_mpi program (executed with no options)
+                    X (= 1,2,3,4) denotes the number of processes
+
+  ma_prof/	    ma_prof library
+  boost/            subset of Boost C++ Libraries 1_54_0
+  boost-extract.sh  script for extracting subset of Boost
 
 Prerequisites
 
-  CMake Utility (http://www.cmake.org)
-  MPI and OpenMP
+  CMake Utility (http://www.cmake.org) version 2.8 or higher
+  MPI and OpenMP (optional)
 
 Configure options
 
   -DLOOPER_ENABLE_OPENMP=OFF  disable OpenMP support (default: ON)
-  -DLOOPER_ENABLE_TIMER=OFF   disable internal timer (default: ON)
+  -DLOOPER_TIMER=OFF          disable internal timer (default: ON)
 
 How to configure, compile, and run tests
 

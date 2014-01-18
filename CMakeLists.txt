@@ -92,6 +92,7 @@ include(config/add_alps_test.cmake)
 #
 # targets
 #
+include_directories(${PROJECT_SOURCE_DIR}/looper)
 add_executable(loop loop.C ${MAPROF_SOURCES})
 add_alps_test(loop)
 
