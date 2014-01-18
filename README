@@ -34,12 +34,10 @@ ALPS/looper Library (http://wistaria.comp-phys.org/alps-looper).
 Prerequisites
 
   CMake Utility (http://www.cmake.org)
-  Boost C++ Library (http://www.boost.org)
   MPI and OpenMP
 
 Configure options
 
-  -DBoost_ROOT_DIR=...        directory of the Boost source
   -DLOOPER_ENABLE_OPENMP=OFF  disable OpenMP support (default: ON)
   -DLOOPER_ENABLE_TIMER=OFF   disable internal timer (default: ON)
 

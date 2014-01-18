@@ -39,9 +39,8 @@ enable_language(C)
 #
 # Required external sources/libraries.
 #
-## Boost srouce
-find_package(BoostSrc)
-include_directories(${Boost_ROOT_DIR})
+## Boost C++ Libraries
+include_directories(${PROJECT_SOURCE_DIR}/boost)
 
 ## MPI
 find_package(MPI)
