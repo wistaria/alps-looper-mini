@@ -37,6 +37,8 @@ ALPS/looper Library (http://wistaria.comp-phys.org/alps-looper).
   boost/            subset of Boost C++ Libraries 1_54_0
   boost-extract.sh  script for extracting subset of Boost
 
+  doc/              some (not up-to-date) documents about the inside structure of ALPS/looper
+
 Prerequisites
 
   CMake Utility (http://www.cmake.org) version 2.8 or higher
